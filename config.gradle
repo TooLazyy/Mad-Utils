@@ -1,23 +1,23 @@
 ext {
     applicationName = "Mad Utils"
     appId = "ru.wearemad.mad_utils"
-    compileSdk = 32
+    compileSdk = 33
     minSdk = 21
-    targetSdk = 32
+    targetSdk = 33
 
     //version
-    vCode = 1
-    vName = "1.0.0"
+    vCode = 2
+    vName = "1.0.1"
 
     //gradle
     gradleVersion = '7.2.1'
 
     //kotlin
-    kotlinVersion = '1.7.0'
+    kotlinVersion = '1.7.20'
     kotlinCoroutinesVersion = '1.6.0'
-    kotlinCoroutinesAndroidVersion = '1.6.1'
-    kotlixExtVersion = '1.8.0'
+    kotlinCoroutinesAndroidVersion = '1.6.4'
+    kotlixExtVersion = '1.9.0'
 
     //app compat
-    appCompatVersion = '1.4.2'
+    appCompatVersion = '1.6.1'
 }
