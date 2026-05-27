@@ -1,7 +1,10 @@
 package ru.wearemad.mad_utils.dispatcher
 
+import android.os.Handler
+import android.os.Looper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.android.asCoroutineDispatcher
 
 interface DispatchersProvider {
 
@@ -16,9 +19,9 @@ interface DispatchersProvider {
 
 class DefaultDispatchersProvider : DispatchersProvider {
 
-    override fun main(): CoroutineDispatcher = Dispatchers.Main
+    override fun main(): CoroutineDispatcher = Handler(Looper.getMainLooper()).asCoroutineDispatcher()//TODO Dispatchers.Main
 
-    override fun mainImmediate(): CoroutineDispatcher = Dispatchers.Main.immediate
+    override fun mainImmediate(): CoroutineDispatcher = Handler(Looper.getMainLooper()).asCoroutineDispatcher()//Dispatchers.Main.immediate
 
     override fun io(): CoroutineDispatcher = Dispatchers.IO
 
