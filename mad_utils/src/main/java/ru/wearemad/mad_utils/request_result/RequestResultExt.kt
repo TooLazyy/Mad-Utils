@@ -1,5 +1,7 @@
 package ru.wearemad.mad_utils.request_result
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -7,6 +9,8 @@ import kotlin.coroutines.suspendCoroutine
 inline fun <T : Any?> wrapResult(block: () -> T): RequestResult<T> {
     return try {
         RequestResult.Success(block())
+    } catch (ex: CancellationException) {
+        throw ex
     } catch (ex: Throwable) {
         RequestResult.Error(ex)
     }
@@ -14,9 +18,11 @@ inline fun <T : Any?> wrapResult(block: () -> T): RequestResult<T> {
 
 suspend inline fun <T : Any?> wrapContinuationResult(
     crossinline block: Continuation<RequestResult<T>>.() -> Unit
-): RequestResult<T> = suspendCoroutine { cont ->
+): RequestResult<T> = suspendCancellableCoroutine { cont ->
     try {
         cont.block()
+    } catch (ex: CancellationException) {
+        throw ex
     } catch (ex: Throwable) {
         cont.resume(RequestResult.Error(ex))
     }
@@ -27,7 +33,6 @@ suspend fun <R : Any?> RequestResult<R>.mapError(mapper: suspend (Throwable) -> 
         is RequestResult.Error -> RequestResult.Error(mapper(error))
         is RequestResult.Success -> this
     }
-
 
 suspend fun <R : Any?> RequestResult<R>.mapResultOnError(mapper: suspend (Throwable) -> RequestResult<R>): RequestResult<R> =
     when (this) {
